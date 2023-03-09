@@ -24,10 +24,11 @@
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { storeCurrentUser, fetchCurrentUser } from '$lib/supabase';
-	import { User, Home, Calendar } from 'svelte-heros-v2';
+	import { User, Home } from 'svelte-heros-v2';
 	import { Screens } from '$lib/types/screens';
 	import { goto } from '$app/navigation';
 	import { pwaInfo } from 'virtual:pwa-info';
+	import { preventAutoInstallPrompt } from '../pwa';
 
 	// make tab containing the tab of the current screen
 	let tab = Screens.getScreenFromPath($page.url.pathname)?.tab ?? 0;
@@ -38,6 +39,7 @@
 		if (!import.meta.env.SSR && newTab) goto(newTab.path);
 	}
 	onMount(async () => {
+		preventAutoInstallPrompt();
 		fetchCurrentUser();
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
