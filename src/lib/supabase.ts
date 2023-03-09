@@ -52,7 +52,7 @@ export async function createUser(
 		console.log({ error2 });
 		return;
 	}
-	return fetchCurrentUser();
+	fetchCurrentUser();
 }
 
 export async function loginUser(email: string, password: string) {
@@ -80,6 +80,7 @@ export async function loginUser(email: string, password: string) {
 		return;
 	}
 	showMessage('Connecté ! 🎉');
+	fetchCurrentUser();
 }
 
 export async function logoutUser() {
@@ -90,6 +91,7 @@ export async function logoutUser() {
 		return;
 	}
 	showMessage(error.message);
+	fetchCurrentUser();
 }
 
 export async function getDoctorAppointment(): Promise<

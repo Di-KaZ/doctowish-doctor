@@ -44,6 +44,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@supabase/supabase-js": "^2.10.0"
+		"@supabase/supabase-js": "^2.10.0",
+		"ics": "^3.1.0"
 	}
 }
