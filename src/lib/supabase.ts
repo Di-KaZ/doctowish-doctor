@@ -45,7 +45,8 @@ export async function createUser(
 		firstName,
 		user: user?.id,
 		profession,
-		type: 'doctor'
+		type: 'doctor',
+		email
 	});
 	if (error2) {
 		showMessage(error2.message);
@@ -134,4 +135,28 @@ export async function fetchCurrentUser() {
 	}
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	storeCurrentUser.set({ data: data!, user: user! });
+}
+
+export async function deleteAppointment(id: string) {
+	const { error } = await supabase.from('appointment').delete().eq('id', id);
+	if (error) {
+		showMessage(error.message);
+		return;
+	}
+	showMessage('Rendez-vous supprimé !');
+}
+
+export async function sendMail(
+	appointment: Database['public']['Tables']['appointment']['Row'] & {
+		patient: Database['public']['Tables']['user_info']['Row'];
+	}
+) {
+	const doctor = get(storeCurrentUser);
+	window.location.assign(
+		`mailto:${appointment.patient.email}?subject=Votre rendez-vous ${
+			appointment.name
+		}&body=${encodeURIComponent(
+			`Bonjour ${appointment.patient.firstName},\n\nvotre rendez-vous est prévu le ${appointment.date}\n\n Cordialement,\n\n Dr. ${doctor.data.firstName} ${doctor.data.name}`
+		)}`
+	);
 }

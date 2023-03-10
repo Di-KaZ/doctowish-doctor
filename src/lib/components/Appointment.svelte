@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { deleteAppointment, sendMail } from '$lib/supabase';
 	import type { Database } from '$lib/types/supabase';
 	import { Avatar } from '@skeletonlabs/skeleton';
-	import { Trash } from 'svelte-heros-v2';
+	import { Envelope, Trash } from 'svelte-heros-v2';
 	import AsyncButton from './AsyncButton.svelte';
 	export let appointment:
 		| (Database['public']['Tables']['appointment']['Row'] & {
@@ -15,8 +16,16 @@
 {#if appointment}
 	<div class="card p-4 m-4">
 		<header class="flex justify-between">
-			<h1 class="font-bold capitalize">{appointment.name}</h1>
-			<AsyncButton class="btn variant-filled-primary" onClick={() => {}}><Trash /></AsyncButton>
+			<h1 class="font-bold capitalize truncate">{appointment.name}</h1>
+			<div class="flex space-x-2">
+				<AsyncButton
+					class="btn variant-filled-primary"
+					onClick={() => deleteAppointment(appointment?.id)}><Trash /></AsyncButton
+				>
+				<button class="btn variant-filled-primary" on:click={() => sendMail(appointment)}
+					><Envelope /></button
+				>
+			</div>
 		</header>
 		<div>
 			<h6>
